@@ -14,6 +14,8 @@ const RFQWizardModal: React.FC<RFQWizardModalProps> = ({ isOpen, onClose, initia
   const { addRFQ, products } = useDatabase();
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(false);
   const [rfqNumber, setRfqNumber] = useState('');
   const [formData, setFormData] = useState({
     fullName: '',
@@ -33,32 +35,63 @@ const RFQWizardModal: React.FC<RFQWizardModalProps> = ({ isOpen, onClose, initia
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const generatedRef = `RFQ-2026-${Math.floor(1000 + Math.random() * 9000)}`;
     
-    addRFQ({
-      id: `rfq-${Date.now()}`,
-      createdAt: new Date().toISOString().split('T')[0],
-      rfqNumber: generatedRef,
-      fullName: formData.fullName,
-      companyName: formData.companyName,
-      country: formData.country,
-      email: formData.email,
-      phone: formData.phone,
-      whatsApp: formData.whatsApp,
-      productName: formData.productName,
-      quantity: formData.quantity,
-      unit: formData.unit,
-      packagingPreference: formData.packagingPreference,
-      destinationPort: formData.destinationPort,
-      specificationsRequired: formData.specificationsRequired,
-      additionalNotes: formData.additionalNotes,
-      status: 'NEW'
-    });
+    setIsSubmitting(true);
+    setError(false);
 
-    setRfqNumber(generatedRef);
-    setSubmitted(true);
+    try {
+      // 1. Save to local state
+      addRFQ({
+        id: `rfq-${Date.now()}`,
+        createdAt: new Date().toISOString().split('T')[0],
+        rfqNumber: generatedRef,
+        fullName: formData.fullName,
+        companyName: formData.companyName,
+        country: formData.country,
+        email: formData.email,
+        phone: formData.phone,
+        whatsApp: formData.whatsApp,
+        productName: formData.productName,
+        quantity: formData.quantity,
+        unit: formData.unit,
+        packagingPreference: formData.packagingPreference,
+        destinationPort: formData.destinationPort,
+        specificationsRequired: formData.specificationsRequired,
+        additionalNotes: formData.additionalNotes,
+        status: 'NEW'
+      });
+
+      // 2. Send email via FormSubmit
+      const response = await fetch("https://formsubmit.co/ajax/michaeldmwintuma@gmail.com", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `New Request for Quote (RFQ): ${generatedRef}`,
+          _captcha: "false",
+          _template: "table",
+          _replyto: formData.email || undefined,
+          _autoresponse: formData.email ? "Thank you for reaching out to us! We have successfully received your submission and our team is already reviewing your details. Rest assured, one of our specialists will get back to you shortly. We appreciate your interest and look forward to working with you!" : undefined,
+          ...formData
+        })
+      });
+
+      if (response.ok) {
+        setRfqNumber(generatedRef);
+        setSubmitted(true);
+      } else {
+        setError(true);
+      }
+    } catch (err) {
+      setError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -246,11 +279,19 @@ const RFQWizardModal: React.FC<RFQWizardModalProps> = ({ isOpen, onClose, initia
               ></textarea>
             </div>
 
+            {error && (
+              <p className="text-red-500 text-xs text-center mb-4">There was an error sending your quote request. Please try again.</p>
+            )}
             <button
               type="submit"
-              className="w-full py-3.5 rounded-xl bg-forest-main dark:bg-gold-accent text-white dark:text-forest-dark font-heading font-bold text-xs uppercase tracking-wider hover:bg-forest-dark transition-all flex items-center justify-center gap-2 shadow-md"
+              disabled={isSubmitting}
+              className="w-full py-3.5 rounded-xl bg-forest-main dark:bg-gold-accent text-white dark:text-forest-dark font-heading font-bold text-xs uppercase tracking-wider hover:bg-forest-dark transition-all flex items-center justify-center gap-2 shadow-md disabled:opacity-70"
             >
-              <Send className="w-4 h-4" /> Submit Quote Request
+              {isSubmitting ? (
+                'Sending...'
+              ) : (
+                <><Send className="w-4 h-4" /> Submit Quote Request</>
+              )}
             </button>
           </form>
         )}

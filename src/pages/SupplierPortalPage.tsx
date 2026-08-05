@@ -8,6 +8,8 @@ const SupplierPortalPage: React.FC = () => {
   const { addSupplierApplication } = useDatabase();
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(false);
   const [formData, setFormData] = useState({
     farmOrCompanyName: '',
     contactPerson: '',
@@ -23,26 +25,57 @@ const SupplierPortalPage: React.FC = () => {
     notes: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.farmOrCompanyName || !formData.contactPerson || !formData.phone) return;
 
-    addSupplierApplication({
-      farmOrCompanyName: formData.farmOrCompanyName,
-      contactPerson: formData.contactPerson,
-      locationRegion: formData.locationRegion,
-      locationDistrict: formData.locationDistrict,
-      email: formData.email,
-      phone: formData.phone,
-      productsSupplied: [formData.productsSupplied],
-      productionCapacityPerSeason: formData.productionCapacityPerSeason || '50 Metric Tons',
-      harvestSeasons: formData.harvestSeasons || 'Major Season (May - August)',
-      hasCertifications: formData.hasCertifications,
-      certificationDetails: formData.certificationDetails,
-      notes: formData.notes
-    });
+    setIsSubmitting(true);
+    setError(false);
 
-    setSubmitted(true);
+    try {
+      // 1. Save to local state
+      addSupplierApplication({
+        farmOrCompanyName: formData.farmOrCompanyName,
+        contactPerson: formData.contactPerson,
+        locationRegion: formData.locationRegion,
+        locationDistrict: formData.locationDistrict,
+        email: formData.email,
+        phone: formData.phone,
+        productsSupplied: [formData.productsSupplied],
+        productionCapacityPerSeason: formData.productionCapacityPerSeason || '50 Metric Tons',
+        harvestSeasons: formData.harvestSeasons || 'Major Season (May - August)',
+        hasCertifications: formData.hasCertifications,
+        certificationDetails: formData.certificationDetails,
+        notes: formData.notes
+      });
+
+      // 2. Send email via FormSubmit
+      const response = await fetch("https://formsubmit.co/ajax/michaeldmwintuma@gmail.com", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `New Supplier Application: ${formData.farmOrCompanyName}`,
+          _captcha: "false",
+          _template: "table",
+          _replyto: formData.email || undefined,
+          _autoresponse: formData.email ? "Thank you for reaching out to us! We have successfully received your submission and our team is already reviewing your details. Rest assured, one of our specialists will get back to you shortly. We appreciate your interest and look forward to working with you!" : undefined,
+          ...formData
+        })
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        setError(true);
+      }
+    } catch (err) {
+      setError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const memberBenefits = [
@@ -327,11 +360,19 @@ const SupplierPortalPage: React.FC = () => {
                   ></textarea>
                 </div>
 
+                {error && (
+                  <p className="text-red-500 text-xs text-center">There was an error sending your application. Please try again.</p>
+                )}
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-xl bg-forest-main dark:bg-gold-accent text-white dark:text-forest-dark font-heading font-bold hover:bg-forest-dark transition-all flex items-center justify-center gap-2 shadow-lg text-xs uppercase tracking-wider"
+                  disabled={isSubmitting}
+                  className="w-full py-3.5 rounded-xl bg-forest-main dark:bg-gold-accent text-white dark:text-forest-dark font-heading font-bold hover:bg-forest-dark transition-all flex items-center justify-center gap-2 shadow-lg text-xs uppercase tracking-wider disabled:opacity-70"
                 >
-                  <Send className="w-4 h-4 text-gold-accent dark:text-forest-dark" /> Register For Membership Now
+                  {isSubmitting ? (
+                    'Sending...'
+                  ) : (
+                    <><Send className="w-4 h-4 text-gold-accent dark:text-forest-dark" /> Register For Membership Now</>
+                  )}
                 </button>
               </form>
             )}

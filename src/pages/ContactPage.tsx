@@ -34,6 +34,7 @@ const ContactPage: React.FC = () => {
           _captcha: "false",
           _template: "table",
           _replyto: formData.email,
+          _autoresponse: "Thank you for reaching out to us! We have successfully received your submission and our team is already reviewing your details. Rest assured, one of our specialists will get back to you shortly. We appreciate your interest and look forward to working with you!",
           ...formData
         })
       });
