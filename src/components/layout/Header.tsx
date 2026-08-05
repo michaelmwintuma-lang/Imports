@@ -13,8 +13,7 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [productsDropdownOpen, setProductsDropdownOpen] = useState(false);
-  const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
+  const [businessAreasOpen, setBusinessAreasOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -141,6 +140,20 @@ const Header: React.FC = () => {
                   <Link to="/about" className={linkClass('/about')}>About Us</Link>
 
                   <Link to="/products?category=All" className={linkClass('/products')}>Products</Link>
+                  
+                  {/* Business Areas Dropdown */}
+                  <div className="relative group">
+                    <button className={`${linkClass('/business-areas')} flex items-center gap-1 cursor-default py-2`}>
+                      Business Areas <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />
+                    </button>
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-56 bg-white dark:bg-dark-card rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.4)] border border-cream-muted dark:border-dark-border py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                      <Link to="/agro-processing" className="block px-5 py-3 text-[13px] font-bold text-charcoal/80 dark:text-dark-text/80 hover:text-forest-main dark:hover:text-gold-accent hover:bg-cream-bg dark:hover:bg-dark-muted transition-colors">Agro-Processing</Link>
+                      <Link to="/export-distribution" className="block px-5 py-3 text-[13px] font-bold text-charcoal/80 dark:text-dark-text/80 hover:text-forest-main dark:hover:text-gold-accent hover:bg-cream-bg dark:hover:bg-dark-muted transition-colors">Export & Distribution</Link>
+                      <Link to="/global-markets" className="block px-5 py-3 text-[13px] font-bold text-charcoal/80 dark:text-dark-text/80 hover:text-forest-main dark:hover:text-gold-accent hover:bg-cream-bg dark:hover:bg-dark-muted transition-colors">Global Markets</Link>
+                      <Link to="/insights" className="block px-5 py-3 text-[13px] font-bold text-charcoal/80 dark:text-dark-text/80 hover:text-forest-main dark:hover:text-gold-accent hover:bg-cream-bg dark:hover:bg-dark-muted transition-colors">Insights & News</Link>
+                    </div>
+                  </div>
+
                   <Link to="/contact" className={linkClass('/contact')}>Contact</Link>
                 </nav>
 
@@ -188,6 +201,24 @@ const Header: React.FC = () => {
               <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-semibold text-charcoal dark:text-dark-text border-b border-cream-muted dark:border-dark-border pb-3">About Us</Link>
 
               <Link to="/products?category=All" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-semibold text-charcoal dark:text-dark-text border-b border-cream-muted dark:border-dark-border pb-3">Products</Link>
+
+              <div className="border-b border-cream-muted dark:border-dark-border pb-3">
+                <button 
+                  onClick={() => setBusinessAreasOpen(!businessAreasOpen)}
+                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-semibold text-charcoal dark:text-dark-text"
+                >
+                  Business Areas
+                  <ChevronDown size={18} className={`transition-transform duration-300 ${businessAreasOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {businessAreasOpen && (
+                  <div className="pl-6 pr-3 py-2 space-y-3 mt-1 bg-cream-bg/50 dark:bg-dark-muted/50 rounded-xl">
+                    <Link to="/agro-processing" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-semibold text-charcoal/80 dark:text-dark-text/80">Agro-Processing</Link>
+                    <Link to="/export-distribution" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-semibold text-charcoal/80 dark:text-dark-text/80">Export & Distribution</Link>
+                    <Link to="/global-markets" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-semibold text-charcoal/80 dark:text-dark-text/80">Global Markets</Link>
+                    <Link to="/insights" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-semibold text-charcoal/80 dark:text-dark-text/80">Insights & News</Link>
+                  </div>
+                )}
+              </div>
 
               <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-semibold text-charcoal dark:text-dark-text border-b border-cream-muted dark:border-dark-border pb-3">Contact</Link>
             </div>
