@@ -1,4 +1,4 @@
-export type ProductCategory = 
+export type ProductCategory =
   | 'Staple Food Products'
   | 'Processed Cassava Products'
   | 'Grains, Beans & Legumes'
@@ -159,10 +159,14 @@ export interface CompanyConfig {
   supportingStatement: string;
   companyDescription: string;
   phone: string;
+  additionalPhone?: string;
   whatsApp: string;
   whatsAppPreFilledMsg: string;
   email: string;
   address: string;
+  poBox?: string;
+  digitalAddress?: string;
+  landmark?: string;
   businessHours: string;
   exportMarkets: string[];
   processingCapabilities: string[];

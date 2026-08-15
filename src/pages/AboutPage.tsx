@@ -27,17 +27,17 @@ const AboutPage: React.FC = () => {
   return (
     <div className="bg-cream-bg dark:bg-dark-bg min-h-screen transition-colors duration-300">
       {/* Hero Header */}
-      <section className="bg-forest-dark text-white pt-32 pb-16 md:pt-40 md:pb-20 relative overflow-hidden flex flex-col justify-center">
-        <div className="absolute inset-0 bg-gradient-to-r from-forest-dark via-forest-main to-transparent opacity-90"></div>
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-10 mt-10 md:mt-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold-accent/20 border border-gold-accent/40 text-gold-light text-xs font-semibold uppercase tracking-wider mb-4">
+      <section className="bg-forest-dark text-white pt-28 pb-16 md:pt-36 md:pb-20 relative overflow-hidden flex flex-col justify-center">
+        <div className="absolute inset-0 bg-gradient-to-r from-forest-dark via-forest-main to-forest-dark opacity-90"></div>
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-10 text-center max-w-4xl flex flex-col items-center mt-6 md:mt-8">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold-accent/20 border border-gold-accent/40 text-gold-light text-xs font-semibold uppercase tracking-wider mb-5">
             About {config.companyName}
           </div>
-          <h1 className="text-4xl md:text-6xl font-heading font-extrabold tracking-tight text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight text-white mb-5 leading-tight">
             From Ghana's Farms <br />
             <span className="text-gold-accent">To Global Markets</span>
           </h1>
-          <p className="text-base md:text-lg text-white/80 max-w-3xl font-light leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-white/90 font-normal leading-relaxed max-w-3xl mx-auto">
             We are a premier Ghanaian agricultural sourcing, food trading, and agro-processing enterprise dedicated to connecting high-quality African food products with domestic and international markets.
           </p>
         </div>
@@ -71,8 +71,8 @@ const AboutPage: React.FC = () => {
               {/* Premium Image Container */}
               <div className="aspect-[4/3] rounded-[2rem] overflow-hidden shadow-2xl relative border-4 border-white dark:border-dark-card">
                 <img
-                  src="/images/image 1.webp"
-                  alt="Ghanaian Agriculture Farm"
+                  src="/images/fresh yam.jpeg"
+                  alt="Fresh Ghanaian Pona Yams"
                   className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700 ease-out"
                 />
                 <div className="absolute inset-0 bg-forest-dark/10 pointer-events-none"></div>

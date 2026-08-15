@@ -1,22 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCompany } from '../context/CompanyContext';
+import { useDatabase } from '../context/DatabaseContext';
+import { ArticleItem } from '../types';
+import InsightDetailModal from '../components/insights/InsightDetailModal';
+import { Globe, ArrowRight, ShieldCheck, Newspaper, Clock } from 'lucide-react';
 
 const ImportExportPage: React.FC = () => {
   const { config } = useCompany();
+  const { articles } = useDatabase();
+  const [selectedArticle, setSelectedArticle] = useState<ArticleItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const tradeArticles = articles.filter(a => a.category === 'Export Compliance' || a.category === 'Market Trends');
 
   return (
     <div className="bg-cream-bg dark:bg-dark-bg min-h-screen transition-colors duration-300">
       {/* Hero */}
-      <section className="bg-forest-dark text-white py-16 md:py-20 relative">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold-accent/20 border border-gold-accent/40 text-gold-light text-xs font-semibold uppercase tracking-wider mb-4">
-            International Trade Capabilities
+      <section className="bg-brand-navy text-white pt-28 pb-16 md:py-24 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-10 text-center max-w-4xl flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-coral/20 border border-brand-coral/40 text-brand-coral text-xs font-bold uppercase tracking-wider mb-5">
+            <Globe className="w-4 h-4" /> Global Trade & Logistics
           </div>
-          <h1 className="text-4xl md:text-6xl font-heading font-extrabold text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-white mb-5 leading-tight tracking-tight">
             Import & Export <br />
-            <span className="text-gold-accent">Global Trade Services</span>
+            <span className="text-brand-coral">Global Trade Services</span>
           </h1>
-          <p className="text-base md:text-lg text-white/80 max-w-3xl font-light leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-white/90 font-normal leading-relaxed max-w-3xl mx-auto">
             Connecting premium Ghanaian agricultural commodities with international buyers in Europe, North America, Middle East, Asia, and West Africa, alongside vetted imports for Ghana.
           </p>
         </div>
@@ -26,7 +35,7 @@ const ImportExportPage: React.FC = () => {
       <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
           <div className="max-w-3xl mb-10">
-            <span className="text-xs font-bold tracking-widest text-gold-dark dark:text-gold-accent uppercase mb-2 block">
+            <span className="text-xs font-bold tracking-widest text-brand-coral uppercase mb-2 block">
               Outbound Logistics
             </span>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-forest-dark dark:text-white mb-3">
@@ -45,8 +54,8 @@ const ImportExportPage: React.FC = () => {
               { step: "04", title: "Export Documentation & Certifications", desc: "Issuance of Phytosanitary Certificates, Certificates of Origin, Certificate of Analysis (CoA), and Bill of Lading." },
               { step: "05", title: "Containerization & Port Dispatch", desc: "FCL (Full Container Load) or LCL consolidation, container stuffing, moisture absorber placement, and vessel departure." }
             ].map((item, idx) => (
-              <div key={idx} className="p-6 bg-white dark:bg-dark-card rounded-2xl border border-cream-muted dark:border-dark-border shadow-sm flex flex-col md:flex-row items-start md:items-center gap-5">
-                <div className="w-10 h-10 rounded-xl bg-forest-main dark:bg-gold-accent text-white dark:text-forest-dark font-heading font-extrabold flex items-center justify-center text-sm shrink-0">
+              <div key={idx} className="p-6 bg-white dark:bg-dark-card rounded-2xl border border-slate-200 dark:border-dark-border shadow-xs flex flex-col md:flex-row items-start md:items-center gap-5">
+                <div className="w-10 h-10 rounded-xl bg-brand-blue text-white font-heading font-extrabold flex items-center justify-center text-sm shrink-0">
                   {item.step}
                 </div>
                 <div className="flex-1">
@@ -59,52 +68,56 @@ const ImportExportPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Import Section */}
-      <section className="py-12 bg-white dark:bg-dark-card border-y border-cream-muted dark:border-dark-border">
+      {/* Real News & Trade Insights Sub-session */}
+      <section className="py-16 bg-white dark:bg-dark-card border-t border-cream-muted dark:border-dark-border">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <div>
-              <span className="text-xs font-bold tracking-widest text-gold-dark dark:text-gold-accent uppercase mb-2 block">
-                Inbound Logistics
-              </span>
-              <h2 className="text-3xl font-heading font-bold text-forest-dark dark:text-white mb-4">
-                Sourcing & Importation for Ghana
-              </h2>
-              <p className="text-sm text-charcoal/80 dark:text-dark-text/80 leading-relaxed mb-4">
-                In addition to exporting Ghanaian produce, <strong>{config.companyName}</strong> imports select food products, raw ingredients, and agricultural inputs to serve domestic wholesalers, retailers, and food manufacturers across Ghana.
-              </p>
-              <div className="space-y-3 text-xs text-charcoal/80 dark:text-dark-text/80">
-                <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-forest-main/10 dark:bg-gold-accent/20 text-forest-main dark:text-gold-accent flex items-center justify-center shrink-0 mt-0.5 font-bold">✓</div>
-                  <p>Strict supplier verification to prevent sub-standard food imports.</p>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-forest-main/10 dark:bg-gold-accent/20 text-forest-main dark:text-gold-accent flex items-center justify-center shrink-0 mt-0.5 font-bold">✓</div>
-                  <p>Full port clearance, FDA Ghana registration compliance, and warehousing.</p>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-forest-main/10 dark:bg-gold-accent/20 text-forest-main dark:text-gold-accent flex items-center justify-center shrink-0 mt-0.5 font-bold">✓</div>
-                  <p>Efficient local wholesale distribution networks throughout Ghana.</p>
-                </div>
-              </div>
+          <div className="mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-coral/10 text-brand-coral text-xs font-bold uppercase tracking-wider mb-2">
+              <Newspaper className="w-3.5 h-3.5" /> Export Compliance & Market Insights
             </div>
+            <h2 className="text-3xl font-heading font-extrabold text-forest-dark dark:text-white">
+              International Trade & Phytosanitary Reports
+            </h2>
+          </div>
 
-            <div className="p-8 rounded-3xl bg-forest-dark text-white border border-white/10 shadow-editorial">
-              <h3 className="text-2xl font-heading font-bold text-white mb-3">Export Destinations & Markets</h3>
-              <p className="text-xs text-white/80 leading-relaxed mb-5">
-                We serve international importers, Asian ingredient buyers, European African specialty food distributors, and North American ethnic food chains.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {config.exportMarkets.map((market: string, idx: number) => (
-                  <span key={idx} className="px-3 py-1.5 rounded-full bg-gold-accent/20 border border-gold-accent/30 text-gold-light text-xs font-medium">
-                    {market}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {tradeArticles.map((article) => (
+              <div
+                key={article.id}
+                onClick={() => { setSelectedArticle(article); setIsModalOpen(true); }}
+                className="bg-slate-50 dark:bg-dark-muted rounded-2xl p-6 border border-slate-200 dark:border-dark-border shadow-xs hover:shadow-md transition-shadow cursor-pointer flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs text-charcoal/60 dark:text-dark-text/60 mb-3">
+                    <span className="px-2.5 py-0.5 bg-brand-blue text-white font-bold rounded-md">
+                      {article.category}
+                    </span>
+                    <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-brand-coral" /> {article.readTime}</span>
+                  </div>
+                  <h3 className="text-lg font-heading font-extrabold text-forest-dark dark:text-white mb-2 group-hover:text-brand-coral transition-colors">
+                    {article.title}
+                  </h3>
+                  <p className="text-xs text-charcoal/70 dark:text-dark-text/70 line-clamp-2 leading-relaxed">
+                    {article.excerpt}
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-cream-muted dark:border-dark-border flex items-center justify-between">
+                  <span className="text-xs font-bold text-brand-blue dark:text-brand-coral group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                    Read Export Compliance Insight <ArrowRight className="w-3.5 h-3.5" />
                   </span>
-                ))}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* Insight Detail Modal */}
+      <InsightDetailModal
+        article={selectedArticle}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };

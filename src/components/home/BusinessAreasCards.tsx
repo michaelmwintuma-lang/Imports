@@ -48,7 +48,7 @@ const BusinessAreasCards: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {areas.map((area) => (
-            <div key={area.id} className="group card-editorial overflow-hidden flex flex-col h-full">
+            <div key={area.id} className="group card-editorial overflow-hidden flex flex-col h-full hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 ease-out border border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl">
               <div className="h-56 overflow-hidden relative">
                 <img 
                   src={area.image} 

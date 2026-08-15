@@ -138,8 +138,8 @@ const HeroSection: React.FC = () => {
       ))}
 
       {/* FOREGROUND CONTENT LAYER */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-20 w-full pt-32 md:pt-48 pb-16 md:pb-24 flex-grow flex flex-col justify-center">
-        <div className="max-w-3xl">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-20 w-full pt-32 md:pt-48 pb-16 md:pb-24 flex-grow flex flex-col justify-center items-center text-center">
+        <div className="max-w-4xl flex flex-col items-center">
           {/* Animated Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold-accent/20 border border-gold-accent/40 text-gold-light text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-6 animate-fade-in max-w-full truncate">
             <span className="w-2 h-2 rounded-full bg-gold-accent animate-ping shrink-0" />
@@ -155,21 +155,21 @@ const HeroSection: React.FC = () => {
           </h1>
 
           {/* Slide Description */}
-          <p className="text-sm sm:text-base md:text-xl text-white/90 font-light leading-relaxed mb-8 max-w-2xl min-h-[80px] sm:min-h-[60px] md:min-h-[72px]">
+          <p className="text-base sm:text-lg md:text-xl text-white/90 font-normal leading-relaxed mb-8 max-w-3xl min-h-[80px] sm:min-h-[60px] md:min-h-[72px] mx-auto">
             {heroSlides[currentSlide].description}
           </p>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap items-center gap-4 mb-10">
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
             <Link
               to={heroSlides[currentSlide].primaryCtaLink}
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-gold-accent text-forest-dark font-heading font-bold text-sm hover:bg-gold-light transition-all shadow-lg hover:shadow-gold-accent/30 uppercase tracking-wider"
+              className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-gold-accent text-forest-dark font-heading font-bold text-sm hover:bg-gold-light hover:-translate-y-0.5 transition-all shadow-lg hover:shadow-gold-accent/30 uppercase tracking-wider"
             >
-              {heroSlides[currentSlide].primaryCtaText} <ArrowRight className="w-4 h-4" />
+              {heroSlides[currentSlide].primaryCtaText} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
             <Link
               to={heroSlides[currentSlide].secondaryCtaLink}
-              className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-white/10 backdrop-blur-md text-white font-heading font-semibold text-sm hover:bg-white/20 border border-white/20 transition-all uppercase tracking-wider"
+              className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-white/10 backdrop-blur-md text-white font-heading font-semibold text-sm hover:bg-white/20 hover:-translate-y-0.5 border border-white/20 transition-all uppercase tracking-wider"
             >
               {heroSlides[currentSlide].secondaryCtaText}
             </Link>

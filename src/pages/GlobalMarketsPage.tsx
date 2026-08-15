@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { useCompany } from '../context/CompanyContext';
-import { Building2, ShoppingBag, Truck, FileCheck, ArrowRight } from 'lucide-react';
+import { useDatabase } from '../context/DatabaseContext';
+import { ArticleItem } from '../types';
+import InsightDetailModal from '../components/insights/InsightDetailModal';
+import { Building2, ShoppingBag, Truck, FileCheck, ArrowRight, Globe, Newspaper, Clock } from 'lucide-react';
 import RFQWizardModal from '../components/products/RFQWizardModal';
 
 const GlobalMarketsPage: React.FC = () => {
   const { config } = useCompany();
+  const { articles } = useDatabase();
   const [selectedRegion, setSelectedRegion] = useState('Europe');
   const [isRFQOpen, setIsRFQOpen] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState<ArticleItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const marketArticles = articles.filter(a => a.category === 'Market Trends');
 
   const regionDetails: Record<string, { desc: string; demand: string[]; ports: string }> = {
     'Europe': {
@@ -39,16 +47,16 @@ const GlobalMarketsPage: React.FC = () => {
   return (
     <div className="bg-cream-bg dark:bg-dark-bg min-h-screen transition-colors duration-300">
       {/* Hero */}
-      <section className="bg-forest-dark text-white py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold-accent/20 border border-gold-accent/40 text-gold-light text-xs font-semibold uppercase tracking-wider mb-4">
-            Global Trade Operations
+      <section className="bg-brand-navy text-white pt-28 pb-16 md:py-24 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-10 text-center max-w-4xl flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-coral/20 border border-brand-coral/40 text-brand-coral text-xs font-bold uppercase tracking-wider mb-5">
+            <Globe className="w-4 h-4" /> Global Trade Operations
           </div>
-          <h1 className="text-4xl md:text-6xl font-heading font-extrabold text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-white mb-5 leading-tight tracking-tight">
             From Ghana To <br />
-            <span className="text-gold-accent">The World</span>
+            <span className="text-brand-coral">Global Markets</span>
           </h1>
-          <p className="text-base md:text-lg text-white/80 max-w-3xl font-light leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-white/90 font-normal leading-relaxed max-w-3xl mx-auto">
             Delivering quality-checked Ghanaian agricultural produce to international importers, supermarkets, food manufacturers, and wholesale distributors worldwide.
           </p>
         </div>
@@ -58,7 +66,7 @@ const GlobalMarketsPage: React.FC = () => {
       <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-xs font-bold tracking-widest text-gold-dark dark:text-gold-accent uppercase mb-2 block">
+            <span className="text-xs font-bold tracking-widest text-brand-coral uppercase mb-2 block">
               Market Footprint
             </span>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-forest-dark dark:text-white">
@@ -72,8 +80,8 @@ const GlobalMarketsPage: React.FC = () => {
                 key={reg}
                 onClick={() => setSelectedRegion(reg)}
                 className={`px-5 py-2.5 rounded-full text-xs font-heading font-semibold transition-all ${selectedRegion === reg
-                  ? 'bg-forest-main dark:bg-gold-accent text-white dark:text-forest-dark shadow-md'
-                  : 'bg-white dark:bg-dark-card text-charcoal/80 dark:text-dark-text border border-cream-muted dark:border-dark-border hover:border-forest-main/50'
+                  ? 'bg-brand-blue text-white shadow-md'
+                  : 'bg-white dark:bg-dark-card text-charcoal/80 dark:text-dark-text border border-cream-muted dark:border-dark-border hover:border-brand-blue/50'
                   }`}
               >
                 {reg}
@@ -82,10 +90,10 @@ const GlobalMarketsPage: React.FC = () => {
           </div>
 
           {/* Active Region Card */}
-          <div className="bg-white dark:bg-dark-card rounded-3xl p-6 md:p-10 border border-cream-muted dark:border-dark-border shadow-editorial">
+          <div className="bg-white dark:bg-dark-card rounded-3xl p-6 md:p-10 border border-cream-muted dark:border-dark-border shadow-lg">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               <div>
-                <span className="text-xs font-bold text-gold-dark dark:text-gold-accent uppercase tracking-wider block mb-2">Region Focus</span>
+                <span className="text-xs font-bold text-brand-coral uppercase tracking-wider block mb-2">Region Focus</span>
                 <h3 className="text-2xl md:text-3xl font-heading font-bold text-forest-dark dark:text-white mb-3">{selectedRegion}</h3>
                 <p className="text-sm text-charcoal/80 dark:text-dark-text/80 leading-relaxed mb-5">
                   {regionDetails[selectedRegion].desc}
@@ -95,27 +103,27 @@ const GlobalMarketsPage: React.FC = () => {
                   <span className="text-xs font-bold text-charcoal/60 dark:text-dark-text/60 uppercase block mb-2">Key Demanded Commodities</span>
                   <div className="flex flex-wrap gap-2">
                     {regionDetails[selectedRegion].demand.map((item, idx) => (
-                      <span key={idx} className="px-3 py-1 rounded-lg bg-cream-bg dark:bg-dark-muted border border-cream-muted dark:border-dark-border text-xs font-semibold text-forest-dark dark:text-gold-accent">
+                      <span key={idx} className="px-3 py-1 rounded-lg bg-brand-sky dark:bg-dark-muted border border-brand-blue/10 dark:border-dark-border text-xs font-bold text-brand-blue dark:text-brand-coral">
                         {item}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-forest-main/5 dark:bg-gold-accent/10 border border-forest-main/10 dark:border-gold-accent/20 text-xs">
-                  <span className="font-bold text-forest-dark dark:text-gold-accent block mb-1">Common Shipping Ports:</span>
+                <div className="p-3.5 rounded-xl bg-brand-sky dark:bg-dark-muted border border-brand-blue/10 dark:border-dark-border text-xs">
+                  <span className="font-bold text-brand-blue dark:text-brand-coral block mb-1">Common Shipping Ports:</span>
                   <span className="text-charcoal/80 dark:text-dark-text/80">{regionDetails[selectedRegion].ports}</span>
                 </div>
               </div>
 
-              <div className="p-6 md:p-8 rounded-2xl bg-forest-dark text-white border border-white/10">
+              <div className="p-6 md:p-8 rounded-2xl bg-brand-navy text-white border border-white/10 shadow-xl">
                 <h4 className="text-xl font-heading font-bold text-white mb-2">International Buyer Services</h4>
                 <p className="text-xs text-white/80 leading-relaxed mb-5">
                   We customize container stuffing, product moisture content, mesh sizes, and packaging branding to align with your country's food import regulations.
                 </p>
                 <button
                   onClick={() => setIsRFQOpen(true)}
-                  className="w-full py-3.5 rounded-xl bg-gold-accent text-forest-dark font-heading font-bold text-xs uppercase tracking-wider hover:bg-gold-light transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-xl bg-brand-coral hover:bg-brand-peach text-white font-heading font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
                 >
                   Request Regional Quotation <ArrowRight className="w-4 h-4" />
                 </button>
@@ -125,39 +133,56 @@ const GlobalMarketsPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Buyer Centre Section */}
-      <section className="py-12 bg-white dark:bg-dark-card border-t border-cream-muted dark:border-dark-border">
+      {/* Real News & Market Intelligence Sub-session */}
+      <section className="py-16 bg-white dark:bg-dark-card border-t border-cream-muted dark:border-dark-border">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-xs font-bold tracking-widest text-gold-dark dark:text-gold-accent uppercase mb-2 block">
-              Dedicated Portal
-            </span>
-            <h2 className="text-3xl font-heading font-bold text-forest-dark dark:text-white">
-              International Buyer Centre
+          <div className="mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-coral/10 text-brand-coral text-xs font-bold uppercase tracking-wider mb-2">
+              <Newspaper className="w-3.5 h-3.5" /> Market News & Global Intelligence
+            </div>
+            <h2 className="text-3xl font-heading font-extrabold text-forest-dark dark:text-white">
+              Global Demand Reports & Commodity Trends
             </h2>
-            <p className="text-charcoal/70 dark:text-dark-text/70 mt-2 text-sm">
-              Designed specifically for commercial food buyers, importers, and supply chain directors.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-            {[
-              { icon: Building2, title: "Food Importers", desc: "Bulk agricultural commodities with certified Incoterms & ocean shipping documentation." },
-              { icon: ShoppingBag, title: "Supermarket Chains", desc: "Pre-packaged, retail-ready Ghanaian food products with private label capabilities." },
-              { icon: Truck, title: "Wholesalers", desc: "Palletized and containerized supply for regional food hubs and ethnic markets." },
-              { icon: FileCheck, title: "Manufacturers", desc: "High-purity industrial starches, flours, and raw processing ingredients." }
-            ].map((card, i) => (
-              <div key={i} className="p-6 bg-cream-bg dark:bg-dark-muted rounded-2xl border border-cream-muted dark:border-dark-border text-center hover:border-forest-main/40 transition-all">
-                <div className="w-10 h-10 rounded-xl bg-forest-main dark:bg-gold-accent text-white dark:text-forest-dark mx-auto flex items-center justify-center mb-3">
-                  <card.icon className="w-5 h-5" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {marketArticles.map((article) => (
+              <div
+                key={article.id}
+                onClick={() => { setSelectedArticle(article); setIsModalOpen(true); }}
+                className="bg-slate-50 dark:bg-dark-muted rounded-2xl p-6 border border-slate-200 dark:border-dark-border shadow-xs hover:shadow-md transition-shadow cursor-pointer flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs text-charcoal/60 dark:text-dark-text/60 mb-3">
+                    <span className="px-2.5 py-0.5 bg-brand-blue text-white font-bold rounded-md">
+                      {article.category}
+                    </span>
+                    <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-brand-coral" /> {article.readTime}</span>
+                  </div>
+                  <h3 className="text-lg font-heading font-extrabold text-forest-dark dark:text-white mb-2 group-hover:text-brand-blue transition-colors">
+                    {article.title}
+                  </h3>
+                  <p className="text-xs text-charcoal/70 dark:text-dark-text/70 line-clamp-2 leading-relaxed">
+                    {article.excerpt}
+                  </p>
                 </div>
-                <h4 className="text-base font-heading font-bold text-forest-dark dark:text-white mb-2">{card.title}</h4>
-                <p className="text-xs text-charcoal/70 dark:text-dark-text/70 leading-relaxed">{card.desc}</p>
+                <div className="mt-4 pt-3 border-t border-cream-muted dark:border-dark-border flex items-center justify-between">
+                  <span className="text-xs font-bold text-brand-blue dark:text-brand-coral group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                    Read Market Intelligence Report <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
+
+      {/* Insight Reader Modal */}
+      <InsightDetailModal
+        article={selectedArticle}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
 
       {/* RFQ Modal */}
       {isRFQOpen && <RFQWizardModal isOpen={isRFQOpen} onClose={() => setIsRFQOpen(false)} />}

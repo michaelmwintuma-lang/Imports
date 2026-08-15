@@ -106,8 +106,8 @@ const Header: React.FC = () => {
     : 'text-charcoal dark:text-dark-text';
 
   const linkClass = (path: string) => `text-xs font-bold uppercase tracking-widest transition-all duration-300 ${location.pathname === path
-      ? (isTransparent ? 'text-white border-b-2 border-gold-accent pb-1' : 'text-forest-main dark:text-gold-accent border-b-2 border-forest-main dark:border-gold-accent pb-1')
-      : (isTransparent ? 'text-white/80 hover:text-white hover:-translate-y-0.5' : 'text-charcoal/80 dark:text-dark-text/80 hover:text-forest-main dark:hover:text-gold-accent hover:-translate-y-0.5')
+    ? (isTransparent ? 'text-white border-b-2 border-gold-accent pb-1' : 'text-forest-main dark:text-gold-accent border-b-2 border-forest-main dark:border-gold-accent pb-1')
+    : (isTransparent ? 'text-white/80 hover:text-white hover:-translate-y-0.5' : 'text-charcoal/80 dark:text-dark-text/80 hover:text-forest-main dark:hover:text-gold-accent hover:-translate-y-0.5')
     }`;
 
   return (
@@ -121,13 +121,19 @@ const Header: React.FC = () => {
               {/* Logo */}
               <Link to="/" className="flex items-center gap-3 shrink-0">
                 {config.logoUrl ? (
-                  <img src={config.logoUrl} alt={config.companyName} className="h-10 w-auto object-contain" />
+                  <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl overflow-hidden bg-white shadow-md flex items-center justify-center shrink-0 border border-cream-muted dark:border-dark-border">
+                    <img
+                      src={config.logoUrl}
+                      alt={config.companyName}
+                      className="w-full h-full object-contain p-1 transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
                 ) : (
-                  <div className="h-10 w-10 bg-forest-main text-white flex items-center justify-center rounded-lg font-heading font-bold text-xl shadow-md">
+                  <div className="h-12 w-12 bg-brand-blue text-white flex items-center justify-center rounded-xl font-heading font-bold text-xl shadow-md">
                     {config.companyName.charAt(0)}
                   </div>
                 )}
-                <span className={`font-heading font-extrabold text-base md:text-xl tracking-tight transition-colors ${isTransparent ? 'text-white' : 'text-forest-main dark:text-gold-accent'
+                <span className={`font-heading font-extrabold text-base md:text-xl tracking-tight transition-colors ${isTransparent ? 'text-white' : 'text-forest-dark dark:text-brand-coral'
                   }`}>
                   {config.companyName}
                 </span>
@@ -139,8 +145,8 @@ const Header: React.FC = () => {
                   <Link to="/" className={linkClass('/')}>Home</Link>
                   <Link to="/about" className={linkClass('/about')}>About Us</Link>
 
-                  <Link to="/products?category=All" className={linkClass('/products')}>Products</Link>
-                  
+                  <Link to="/products?category=All" className={linkClass('/products')}>Product Gallery</Link>
+
                   {/* Business Areas Dropdown */}
                   <div className="relative group">
                     <button className={`${linkClass('/business-areas')} flex items-center gap-1 cursor-default py-2`}>
@@ -162,8 +168,8 @@ const Header: React.FC = () => {
                   onClick={toggleTheme}
                   aria-label="Toggle dark mode"
                   className={`p-2 rounded-full transition-all ${isTransparent
-                      ? 'bg-white/10 text-white hover:bg-white/20'
-                      : 'bg-cream-bg dark:bg-dark-muted text-forest-main dark:text-gold-accent hover:bg-forest-main hover:text-white'
+                    ? 'bg-white/10 text-white hover:bg-white/20'
+                    : 'bg-cream-bg dark:bg-dark-muted text-forest-main dark:text-gold-accent hover:bg-forest-main hover:text-white'
                     }`}
                   title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
                 >
@@ -176,15 +182,15 @@ const Header: React.FC = () => {
                 <button
                   onClick={toggleTheme}
                   aria-label="Toggle dark mode"
-                  className={`p-2 rounded-full transition-all ${isTransparent ? 'bg-white/10 text-white' : 'bg-cream-bg text-forest-main'
+                  className={`h-11 w-11 min-h-[44px] min-w-[44px] rounded-xl flex items-center justify-center transition-all ${isTransparent ? 'bg-white/15 text-white hover:bg-white/25' : 'bg-slate-100 dark:bg-dark-muted text-slate-900 dark:text-gold-accent hover:bg-slate-200 dark:hover:bg-dark-border'
                     }`}
                 >
-                  {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                  {theme === 'dark' ? <Sun size={22} /> : <Moon size={22} />}
                 </button>
 
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className={`p-2 transition-colors ${isTransparent ? 'text-white hover:text-white/80' : 'text-forest-main dark:text-gold-accent'
+                  className={`h-11 w-11 min-h-[44px] min-w-[44px] rounded-xl flex items-center justify-center transition-colors ${isTransparent ? 'bg-white/15 text-white hover:bg-white/25' : 'bg-slate-100 dark:bg-dark-muted text-slate-900 dark:text-gold-accent hover:bg-slate-200 dark:hover:bg-dark-border'
                     }`}
                   aria-label="Toggle menu"
                 >
@@ -196,31 +202,31 @@ const Header: React.FC = () => {
 
           {/* Mobile Menu Dropdown */}
           {mobileMenuOpen && (
-            <div className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-dark-card shadow-2xl border-t border-cream-muted dark:border-dark-border px-4 py-6 space-y-3 max-h-[85vh] overflow-y-auto">
-              <Link to="/" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-semibold text-charcoal dark:text-dark-text border-b border-cream-muted dark:border-dark-border pb-3">Home</Link>
-              <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-semibold text-charcoal dark:text-dark-text border-b border-cream-muted dark:border-dark-border pb-3">About Us</Link>
+            <div className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-dark-card shadow-2xl border-t border-slate-200 dark:border-dark-border px-4 py-6 space-y-2 max-h-[85vh] overflow-y-auto">
+              <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[44px] px-3 rounded-xl text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-dark-muted">Home</Link>
+              <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[44px] px-3 rounded-xl text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-dark-muted">About Us</Link>
 
-              <Link to="/products?category=All" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-semibold text-charcoal dark:text-dark-text border-b border-cream-muted dark:border-dark-border pb-3">Products</Link>
+              <Link to="/products?category=All" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[44px] px-3 rounded-xl text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-dark-muted">Product Gallery</Link>
 
-              <div className="border-b border-cream-muted dark:border-dark-border pb-3">
-                <button 
+              <div className="py-1">
+                <button
                   onClick={() => setBusinessAreasOpen(!businessAreasOpen)}
-                  className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-semibold text-charcoal dark:text-dark-text"
+                  className="w-full flex items-center justify-between min-h-[44px] px-3 rounded-xl text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-dark-muted"
                 >
                   Business Areas
                   <ChevronDown size={18} className={`transition-transform duration-300 ${businessAreasOpen ? 'rotate-180' : ''}`} />
                 </button>
                 {businessAreasOpen && (
-                  <div className="pl-6 pr-3 py-2 space-y-3 mt-1 bg-cream-bg/50 dark:bg-dark-muted/50 rounded-xl">
-                    <Link to="/agro-processing" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-semibold text-charcoal/80 dark:text-dark-text/80">Agro-Processing</Link>
-                    <Link to="/export-distribution" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-semibold text-charcoal/80 dark:text-dark-text/80">Export & Distribution</Link>
-                    <Link to="/global-markets" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-semibold text-charcoal/80 dark:text-dark-text/80">Global Markets</Link>
-                    <Link to="/insights" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm font-semibold text-charcoal/80 dark:text-dark-text/80">Insights & News</Link>
+                  <div className="pl-4 pr-2 py-2 space-y-1.5 mt-1 bg-slate-50 dark:bg-dark-muted/60 rounded-xl">
+                    <Link to="/agro-processing" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[40px] px-3 text-xs font-bold text-slate-700 dark:text-dark-text hover:text-brand-blue">Agro-Processing</Link>
+                    <Link to="/export-distribution" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[40px] px-3 text-xs font-bold text-slate-700 dark:text-dark-text hover:text-brand-blue">Export & Distribution</Link>
+                    <Link to="/global-markets" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[40px] px-3 text-xs font-bold text-slate-700 dark:text-dark-text hover:text-brand-blue">Global Markets</Link>
+                    <Link to="/insights" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[40px] px-3 text-xs font-bold text-slate-700 dark:text-dark-text hover:text-brand-blue">Insights & News</Link>
                   </div>
                 )}
               </div>
 
-              <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-lg text-sm font-semibold text-charcoal dark:text-dark-text border-b border-cream-muted dark:border-dark-border pb-3">Contact</Link>
+              <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[44px] px-3 rounded-xl text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-dark-muted">Contact</Link>
             </div>
           )}
         </div>

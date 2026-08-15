@@ -65,16 +65,16 @@ const ContactPage: React.FC = () => {
   return (
     <div className="bg-cream-bg dark:bg-dark-bg min-h-screen transition-colors duration-300">
       {/* Hero */}
-      <section className="bg-forest-dark text-white py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold-accent/20 border border-gold-accent/40 text-gold-light text-xs font-semibold uppercase tracking-wider mb-4">
+      <section className="bg-forest-dark text-white pt-28 pb-16 md:py-24 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-10 text-center max-w-4xl flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold-accent/20 border border-gold-accent/40 text-gold-light text-xs font-semibold uppercase tracking-wider mb-5">
             Direct Communication
           </div>
-          <h1 className="text-4xl md:text-6xl font-heading font-extrabold text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-white mb-5 leading-tight tracking-tight">
             Connect With Our <br />
             <span className="text-gold-accent">Trade & Sales Team</span>
           </h1>
-          <p className="text-base md:text-lg text-white/80 max-w-3xl font-light leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-white/90 font-normal leading-relaxed max-w-3xl mx-auto">
             Whether you are an international buyer seeking quotation, a distributor, or an agricultural supplier in Ghana, we are ready to assist.
           </p>
         </div>
@@ -96,10 +96,30 @@ const ContactPage: React.FC = () => {
                       <MapPin className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-[11px] font-bold text-charcoal/50 dark:text-dark-text/50 uppercase block mb-0.5">Address</span>
-                      <span>{config.address}</span>
+                      <span className="text-[11px] font-bold text-charcoal/50 dark:text-dark-text/50 uppercase block mb-0.5">Physical Address & Landmark</span>
+                      <span className="block font-medium">{config.address}</span>
+                      {config.landmark && (
+                        <span className="block text-xs font-semibold text-brand-blue dark:text-brand-coral mt-0.5">Landmark: {config.landmark}</span>
+                      )}
                     </div>
                   </div>
+
+                  {config.poBox && (
+                    <div className="flex items-start gap-4">
+                      <div className="w-9 h-9 rounded-xl bg-forest-main/10 dark:bg-gold-accent/20 text-forest-main dark:text-gold-accent flex items-center justify-center shrink-0">
+                        <Building2 className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="text-[11px] font-bold text-charcoal/50 dark:text-dark-text/50 uppercase block mb-0.5">Postal Box & Digital Address</span>
+                        <span className="block font-medium">{config.poBox}</span>
+                        {config.digitalAddress && (
+                          <span className="inline-block mt-1 px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-dark-muted font-mono text-xs font-bold text-slate-800 dark:text-white border border-slate-200 dark:border-dark-border">
+                            GPS: {config.digitalAddress}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="flex items-start gap-4">
                     <div className="w-9 h-9 rounded-xl bg-forest-main/10 dark:bg-gold-accent/20 text-forest-main dark:text-gold-accent flex items-center justify-center shrink-0">
@@ -116,8 +136,17 @@ const ContactPage: React.FC = () => {
                       <Phone className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-[11px] font-bold text-charcoal/50 dark:text-dark-text/50 uppercase block mb-0.5">Telephone</span>
-                      <a href={`tel:${config.phone}`} className="font-semibold text-forest-main dark:text-gold-accent hover:underline">{config.phone}</a>
+                      <span className="text-[11px] font-bold text-charcoal/50 dark:text-dark-text/50 uppercase block mb-0.5">Telephone Lines</span>
+                      <div className="flex flex-col gap-1">
+                        <a href={`tel:${config.phone}`} className="font-semibold text-forest-main dark:text-gold-accent hover:underline">
+                          {config.phone}
+                        </a>
+                        {config.additionalPhone && (
+                          <a href={`tel:${config.additionalPhone}`} className="font-semibold text-slate-700 dark:text-dark-text hover:underline">
+                            {config.additionalPhone}
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
 

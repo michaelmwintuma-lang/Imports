@@ -2,15 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useDatabase } from '../context/DatabaseContext';
 import ProductCard from '../components/products/ProductCard';
+import ProductDetailModal from '../components/products/ProductDetailModal';
 import { Product } from '../types';
 import RFQWizardModal from '../components/products/RFQWizardModal';
-import { Search, Filter, X, ArrowLeft, ShieldCheck, LayoutGrid, Wheat, Factory, Bean, Flame, Coffee, Leaf, Package, Droplets, CupSoda, Cog, Sprout, Award } from 'lucide-react';
+import { Search, ShieldCheck, LayoutGrid, Wheat, Factory, Bean, Flame, Package, Award } from 'lucide-react';
 
 const ProductsPage: React.FC = () => {
   const { products } = useDatabase();
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchTerm, setSearchTerm] = useState<string>('');
+
+  // Modal states
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState<boolean>(false);
   const [isRFQOpen, setIsRFQOpen] = useState<boolean>(false);
   const [selectedProductForRFQ, setSelectedProductForRFQ] = useState<string>('');
 
@@ -25,65 +30,54 @@ const ProductsPage: React.FC = () => {
 
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const handleSelectProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setIsDetailModalOpen(true);
+  };
 
   const handleRequestQuote = (product: Product) => {
     setSelectedProductForRFQ(product.name);
     setIsRFQOpen(true);
   };
 
-  const handleResetCategory = () => {
-    setSelectedCategory('All');
-    setSearchParams({ category: 'All' });
-  };
-
   const CATEGORIES = [
     { name: 'All', icon: <LayoutGrid className="w-4 h-4" /> },
     { name: 'Staple Food Products', icon: <Wheat className="w-4 h-4" /> },
-    { name: 'Processed Cassava Products', icon: <Factory className="w-4 h-4" /> },
+    { name: 'Flours & Starches', icon: <Factory className="w-4 h-4" /> },
     { name: 'Grains, Beans & Legumes', icon: <Bean className="w-4 h-4" /> },
     { name: 'Spices & Seasonings', icon: <Flame className="w-4 h-4" /> },
-    { name: 'Cocoa & Coffee Products', icon: <Coffee className="w-4 h-4" /> },
-    { name: 'Fruits & Vegetables', icon: <Leaf className="w-4 h-4" /> },
     { name: 'Dried & Processed Foods', icon: <Package className="w-4 h-4" /> },
-    { name: 'Oils & Fats', icon: <Droplets className="w-4 h-4" /> },
-    { name: 'Beverages', icon: <CupSoda className="w-4 h-4" /> },
-    { name: 'Agro-Processed Products', icon: <Cog className="w-4 h-4" /> },
-    { name: 'Nuts & Seeds', icon: <Sprout className="w-4 h-4" /> },
-    { name: 'Organic & Specialty Products', icon: <Award className="w-4 h-4" /> },
+    { name: 'Agro-Processed Products', icon: <Award className="w-4 h-4" /> },
   ];
 
   return (
-    <div className="min-h-screen bg-cream-bg dark:bg-dark-bg py-8 sm:py-12 md:py-16 transition-colors duration-300 overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 dark:bg-dark-bg pt-28 pb-12 sm:pb-16 transition-colors duration-300 overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-        
-        <div className="mb-6 md:mb-8">
-          <div className="flex flex-wrap items-center gap-3 mb-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-accent/20 border border-gold-accent/40 text-gold-dark dark:text-gold-accent text-[11px] sm:text-xs font-semibold uppercase tracking-wider">
-              Export & Product Catalogue
-            </div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forest-main/10 border border-forest-main/30 dark:bg-forest-main/30 dark:border-forest-main/50 text-forest-main dark:text-gold-accent text-[11px] sm:text-xs font-semibold uppercase tracking-wider">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              Operating under FDA
-            </div>
+
+        {/* Header Hero Banner */}
+        <div className="mb-8 text-center max-w-3xl mx-auto flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-200 dark:bg-dark-muted text-slate-700 dark:text-dark-text text-xs font-bold uppercase tracking-wider mb-4 border border-slate-300 dark:border-dark-border">
+            <ShieldCheck className="w-4 h-4 text-brand-blue" /> FDA Ghana Compliant
           </div>
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-heading font-extrabold text-forest-dark dark:text-white mb-3 break-words leading-tight">
-            Ghanaian Agricultural & Processed Products
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-slate-900 dark:text-white mb-4 leading-tight">
+            Assorted Ghanaian Product <span className="text-brand-blue">Gallery</span>
           </h1>
-          <p className="text-xs sm:text-base text-charcoal/80 dark:text-dark-text/80 max-w-3xl leading-relaxed">
-            Explore our certified range of raw commodities and value-added agro-processed foods. All items are processed under strict FDA sanitation standards for international distribution.
+          <p className="text-sm sm:text-base text-slate-600 dark:text-dark-text/80 leading-relaxed">
+            Browse our collection of Ghanaian agricultural commodities, processed food products, and specialty goods. Click any item for details or quote requests.
           </p>
         </div>
 
-        {/* Filter & Search Header */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8 pb-6 border-b border-cream-muted dark:border-dark-border">
-          
-          {/* Scrollable Category Filter Icons */}
-          <div className="flex-1 w-full overflow-hidden">
-            <div className="flex overflow-x-auto hide-scrollbar gap-2 pb-2 -mb-2">
+        {/* Category Filter Pills & Search Bar */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-slate-200 dark:border-dark-border">
+
+          {/* Scrollable Category Filter Pills */}
+          <div className="w-full md:w-auto overflow-x-auto hide-scrollbar">
+            <div className="flex items-center gap-2 pb-2 md:pb-0">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.name}
@@ -91,11 +85,10 @@ const ProductsPage: React.FC = () => {
                     setSelectedCategory(cat.name);
                     setSearchParams({ category: cat.name });
                   }}
-                  className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-heading font-bold text-xs uppercase tracking-wider transition-all shrink-0 border ${
-                    selectedCategory === cat.name 
-                      ? 'bg-forest-main dark:bg-gold-accent text-white dark:text-forest-dark border-forest-main dark:border-gold-accent shadow-md' 
-                      : 'bg-white dark:bg-dark-card text-charcoal/80 dark:text-dark-text/80 border-cream-muted dark:border-dark-border hover:bg-cream-muted/30 dark:hover:bg-dark-muted/50'
-                  }`}
+                  className={`inline-flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl font-heading font-bold text-xs uppercase tracking-wider transition-colors shrink-0 border ${selectedCategory === cat.name
+                      ? 'bg-brand-blue text-white border-brand-blue shadow-xs'
+                      : 'bg-white dark:bg-dark-card text-slate-700 dark:text-dark-text/80 border-slate-200 dark:border-dark-border hover:bg-slate-100 dark:hover:bg-dark-muted'
+                    }`}
                 >
                   {cat.icon}
                   {cat.name}
@@ -104,52 +97,63 @@ const ProductsPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Search Bar */}
-          <div className="relative w-full lg:w-80 shrink-0">
+          {/* Search Input */}
+          <div className="relative w-full md:w-72 shrink-0">
             <input
               type="text"
-              placeholder="Search by product name or specs..."
+              placeholder="Search gallery..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 rounded-xl border border-cream-muted dark:border-dark-border bg-white dark:bg-dark-card text-charcoal dark:text-dark-text text-sm focus:outline-none focus:ring-2 focus:ring-forest-main dark:focus:ring-gold-accent shadow-sm"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-card text-slate-900 dark:text-dark-text text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue shadow-xs"
             />
-            <Search className="w-4 h-4 text-charcoal/40 dark:text-dark-text/40 absolute left-4 top-3.5" />
+            <Search className="w-4 h-4 text-slate-400 dark:text-dark-text/40 absolute left-3.5 top-3" />
           </div>
+
         </div>
 
-        {/* Product Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Products Gallery Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredProducts.map(product => (
-            <ProductCard 
-              key={product.id} 
-              product={product} 
-              onRequestQuote={handleRequestQuote} 
+            <ProductCard
+              key={product.id}
+              product={product}
+              onSelectProduct={handleSelectProduct}
+              onRequestQuote={handleRequestQuote}
             />
           ))}
         </div>
-        
+
+        {/* Empty State */}
         {filteredProducts.length === 0 && (
-          <div className="text-center py-16 bg-white dark:bg-dark-card rounded-2xl border border-cream-muted dark:border-dark-border px-4">
-            <p className="text-charcoal/60 dark:text-dark-text/60 text-sm mb-3">
-              No products found for {selectedCategory !== 'All' ? `category "${selectedCategory}"` : 'your search'}.
+          <div className="text-center py-16 bg-white dark:bg-dark-card rounded-2xl border border-slate-200 dark:border-dark-border px-4 max-w-lg mx-auto">
+            <p className="text-slate-600 dark:text-dark-text/70 text-sm mb-4">
+              No gallery items found matching <strong>"{searchTerm || selectedCategory}"</strong>.
             </p>
-            <button 
-              onClick={() => { handleResetCategory(); setSearchTerm(''); }}
-              className="px-6 py-2.5 rounded-xl bg-forest-main dark:bg-gold-accent text-white dark:text-forest-dark font-heading font-bold text-xs uppercase tracking-wider shadow-md hover:bg-forest-dark transition-all inline-flex items-center gap-2"
+            <button
+              onClick={() => { setSelectedCategory('All'); setSearchParams({ category: 'All' }); setSearchTerm(''); }}
+              className="px-6 py-2.5 rounded-xl bg-brand-blue text-white font-heading font-bold text-xs uppercase tracking-wider shadow-xs hover:bg-forest-hover transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" /> Reset Filters & Display All Products
+              Reset Gallery Filters
             </button>
           </div>
         )}
 
       </div>
 
+      {/* Product Detail Modal */}
+      <ProductDetailModal
+        product={selectedProduct}
+        isOpen={isDetailModalOpen}
+        onClose={() => setIsDetailModalOpen(false)}
+        onRequestQuote={handleRequestQuote}
+      />
+
       {/* RFQ Wizard Modal */}
       {isRFQOpen && (
-        <RFQWizardModal 
-          isOpen={isRFQOpen} 
-          onClose={() => setIsRFQOpen(false)} 
-          initialProduct={selectedProductForRFQ} 
+        <RFQWizardModal
+          isOpen={isRFQOpen}
+          onClose={() => setIsRFQOpen(false)}
+          initialProduct={selectedProductForRFQ}
         />
       )}
     </div>

@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCompany } from '../context/CompanyContext';
-import { Cog, ArrowRight, Check } from 'lucide-react';
+import { useDatabase } from '../context/DatabaseContext';
+import { ArticleItem } from '../types';
+import InsightDetailModal from '../components/insights/InsightDetailModal';
+import { Cog, ArrowRight, Check, Newspaper, Clock } from 'lucide-react';
 
 const AgroProcessingPage: React.FC = () => {
   const { config } = useCompany();
+  const { articles } = useDatabase();
+  const [selectedArticle, setSelectedArticle] = useState<ArticleItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const agroArticles = articles.filter(a => a.category === 'Agro-Processing' || a.category === 'Market Trends');
 
   const steps = [
     { num: '01', title: 'SOURCE', desc: 'Direct farm gate procurement from audited farmer cooperatives across Ghana.' },
@@ -19,17 +27,17 @@ const AgroProcessingPage: React.FC = () => {
   return (
     <div className="bg-cream-bg dark:bg-dark-bg min-h-screen transition-colors duration-300">
       {/* Hero */}
-      <section className="bg-forest-dark text-white py-16 md:py-20 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold-accent/20 border border-gold-accent/40 text-gold-light text-xs font-semibold uppercase tracking-wider mb-4">
+      <section className="bg-brand-navy text-white pt-28 pb-16 md:py-24 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-10 text-center max-w-4xl flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-coral/20 border border-brand-coral/40 text-brand-coral text-xs font-bold uppercase tracking-wider mb-5">
             Agro-Processing & Value Addition
           </div>
-          <h1 className="text-4xl md:text-6xl font-heading font-extrabold text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-white mb-5 leading-tight tracking-tight">
             Adding Value To <br />
-            <span className="text-gold-accent">Ghana's Agriculture</span>
+            <span className="text-brand-coral">Ghana's Harvests</span>
           </h1>
-          <p className="text-base md:text-lg text-white/80 max-w-3xl font-light leading-relaxed">
-            Transforming raw Ghanaian harvests into market-ready, food-grade ingredients, flours, dried chips, and starches meeting strict global import standards.
+          <p className="text-base sm:text-lg md:text-xl text-white/90 font-normal leading-relaxed max-w-3xl mx-auto">
+            Transforming raw Ghanaian crops into market-ready, food-grade ingredients, flours, dried chips, and starches meeting strict international FDA standards.
           </p>
         </div>
       </section>
@@ -38,7 +46,7 @@ const AgroProcessingPage: React.FC = () => {
       <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-xs font-bold tracking-widest text-gold-dark dark:text-gold-accent uppercase mb-2 block">
+            <span className="text-xs font-bold tracking-widest text-brand-coral uppercase mb-2 block">
               Process Methodology
             </span>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-forest-dark dark:text-white">
@@ -51,10 +59,10 @@ const AgroProcessingPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {steps.map((s, idx) => (
-              <div key={idx} className="p-6 bg-white dark:bg-dark-card rounded-2xl border border-cream-muted dark:border-dark-border shadow-sm hover:shadow-editorial transition-all group">
+              <div key={idx} className="p-6 bg-white dark:bg-dark-card rounded-2xl border border-cream-muted dark:border-dark-border shadow-sm hover:shadow-xl transition-all group">
                 <div className="flex justify-between items-center mb-3">
-                  <span className="text-2xl font-heading font-extrabold text-gold-accent">{s.num}</span>
-                  <div className="w-8 h-8 rounded-full bg-forest-main/10 dark:bg-gold-accent/20 text-forest-main dark:text-gold-accent flex items-center justify-center group-hover:bg-forest-main group-hover:text-white transition-colors">
+                  <span className="text-2xl font-heading font-extrabold text-brand-coral">{s.num}</span>
+                  <div className="w-8 h-8 rounded-full bg-brand-sky dark:bg-dark-muted text-brand-blue dark:text-brand-coral flex items-center justify-center group-hover:bg-brand-blue group-hover:text-white transition-colors">
                     <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
@@ -81,15 +89,15 @@ const AgroProcessingPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {config.processingCapabilities.map((cap: string, i: number) => (
               <div key={i} className="p-6 rounded-2xl bg-cream-bg dark:bg-dark-muted border border-cream-muted dark:border-dark-border">
-                <div className="w-10 h-10 rounded-xl bg-forest-main dark:bg-gold-accent text-white dark:text-forest-dark flex items-center justify-center mb-4">
+                <div className="w-10 h-10 rounded-xl bg-brand-blue text-white flex items-center justify-center mb-4">
                   <Cog className="w-5 h-5" />
                 </div>
                 <h3 className="text-lg font-heading font-bold text-forest-dark dark:text-white mb-2">{cap}</h3>
                 <p className="text-xs text-charcoal/70 dark:text-dark-text/70 leading-relaxed mb-4">
                   Executed under strict sanitation protocols, adhering to international HACCP & ISO guidelines.
                 </p>
-                <div className="flex items-center gap-2 text-xs font-semibold text-forest-main dark:text-gold-accent">
-                  <Check className="w-4 h-4 text-gold-accent" /> Available Upon Request
+                <div className="flex items-center gap-2 text-xs font-semibold text-brand-blue dark:text-brand-coral">
+                  <Check className="w-4 h-4 text-brand-coral" /> Available Upon Request
                 </div>
               </div>
             ))}
@@ -97,48 +105,58 @@ const AgroProcessingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Facility Operations Preview */}
-      <section className="py-12 md:py-16">
+      {/* Real News & Sub-session Insights */}
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-          <div className="bg-forest-dark text-white rounded-3xl p-6 md:p-12 overflow-hidden relative border border-white/10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-              <div>
-                <span className="text-xs font-bold tracking-widest text-gold-accent uppercase mb-2 block">
-                  Processing Infrastructure
-                </span>
-                <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
-                  Inside Our Agro-Processing Operations
-                </h2>
-                <p className="text-sm text-white/80 leading-relaxed mb-5">
-                  Equipped with food-grade stainless steel milling circuits, flash dryers, automated vacuum packaging machines, and climate-controlled storage zones to safeguard freshness.
-                </p>
-                <ul className="space-y-2.5 text-xs text-white/90 mb-6">
-                  <li className="flex items-center gap-2.5">
-                    <Check className="w-4 h-4 text-gold-accent" /> Stainless Steel 304 Contact Surfaces
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <Check className="w-4 h-4 text-gold-accent" /> Automated Dust Suppression & Particle Control
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <Check className="w-4 h-4 text-gold-accent" /> In-House Quality Assurance Laboratory
-                  </li>
-                </ul>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-coral/10 text-brand-coral text-xs font-bold uppercase tracking-wider mb-2">
+                <Newspaper className="w-3.5 h-3.5" /> Agro-Processing Insights & Sub-sessions
               </div>
-
-              <div className="aspect-4/3 rounded-2xl overflow-hidden shadow-2xl">
-                <img
-                  src="/images/agro-processing-factory.jpg"
-                  alt="Agro-processing Machinery"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&q=80&w=1200';
-                  }}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <h2 className="text-3xl font-heading font-extrabold text-forest-dark dark:text-white">
+                Technical Reports & Processing Innovations
+              </h2>
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {agroArticles.map((article) => (
+              <div
+                key={article.id}
+                onClick={() => { setSelectedArticle(article); setIsModalOpen(true); }}
+                className="bg-white dark:bg-dark-card rounded-2xl border border-slate-200 dark:border-dark-border p-6 shadow-xs hover:shadow-md transition-shadow cursor-pointer flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs text-charcoal/60 dark:text-dark-text/60 mb-3">
+                    <span className="px-2.5 py-0.5 bg-brand-sky dark:bg-dark-muted text-brand-blue font-bold rounded-md">
+                      {article.category}
+                    </span>
+                    <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-brand-coral" /> {article.readTime}</span>
+                  </div>
+                  <h3 className="text-lg font-heading font-extrabold text-forest-dark dark:text-white mb-2 group-hover:text-brand-blue dark:group-hover:text-brand-coral transition-colors">
+                    {article.title}
+                  </h3>
+                  <p className="text-xs text-charcoal/70 dark:text-dark-text/70 line-clamp-2 leading-relaxed">
+                    {article.excerpt}
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-cream-muted dark:border-dark-border flex items-center justify-between">
+                  <span className="text-xs font-bold text-brand-blue dark:text-brand-coral group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                    Click for Full Technical Insight <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* Insight Reader Modal */}
+      <InsightDetailModal
+        article={selectedArticle}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };

@@ -14,7 +14,7 @@ const ValueChainPipeline: React.FC = () => {
   return (
     <section className="py-12 md:py-16 bg-forest-main text-white overflow-hidden transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-        
+
         <div className="text-center mb-12 max-w-3xl mx-auto">
           <div className="inline-block px-3 py-1 rounded-full bg-white/10 border border-white/20 text-gold-light text-xs font-semibold uppercase tracking-wider mb-3">
             End-to-End Traceability
