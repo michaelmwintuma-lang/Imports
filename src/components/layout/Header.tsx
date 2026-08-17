@@ -3,8 +3,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { useCompany } from '../../context/CompanyContext';
 import { useTheme } from '../../context/ThemeContext';
 import {
-  Menu, X, Sun, Moon, ChevronDown, ArrowRight,
-  Wheat, Layers, Sprout, Nut, Flame, Coffee, Droplets, Package, Grid, ShieldCheck
+  Menu, X, Sun, Moon, ChevronDown, ChevronRight, Home, Info,
+  Package, Briefcase, Factory, Globe, TrendingUp, Newspaper, Mail,
+  Wheat, Layers, Sprout, Nut, Flame, Coffee, Droplets, Sparkles, ShieldCheck, Users
 } from 'lucide-react';
 
 const Header: React.FC = () => {
@@ -43,75 +44,56 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const productCategories = [
-    {
-      title: "Fresh Agricultural Produce",
-      desc: "Yam, Cassava, Plantain, Cocoyam, Ginger, Chili, Mango, Pineapple",
-      category: "Staple Food Products",
-      icon: <Wheat className="w-5 h-5" />
-    },
-    {
-      title: "Processed Food Products",
-      desc: "Premium Gari, HQCF, Cassava Flour, Plantain Flour, Yam Flour, Chips",
-      category: "Processed Cassava Products",
-      icon: <Layers className="w-5 h-5" />
-    },
-    {
-      title: "Grains, Beans & Legumes",
-      desc: "Local Rice, Yellow/White Maize, Cowpeas, Soybeans, Millet, Sorghum",
-      category: "Grains, Beans & Legumes",
-      icon: <Sprout className="w-5 h-5" />
-    },
-    {
-      title: "Nuts & Natural Products",
-      desc: "Raw & Processed Cashew Nuts, Groundnuts, Coconut Commodities",
-      category: "Nuts & Seeds",
-      icon: <Nut className="w-5 h-5" />
-    },
-    {
-      title: "Spices & Seasonings",
-      desc: "Dried Chili, Ginger, Prekese, Grains of Selim (Hwentia), Dawadawa",
-      category: "Spices & Seasonings",
-      icon: <Flame className="w-5 h-5" />
-    },
-    {
-      title: "Cocoa & Coffee Products",
-      desc: "Raw Cocoa Beans, Cocoa Powder, Cocoa Butter, Chocolate, Coffee",
-      category: "Cocoa & Coffee Products",
-      icon: <Coffee className="w-5 h-5" />
-    },
-    {
-      title: "Oils, Fats & Specialties",
-      desc: "Red Palm Oil, Virgin Coconut Oil, Raw Shea Butter, Baobab, Moringa",
-      category: "Oils & Fats",
-      icon: <Droplets className="w-5 h-5" />
-    },
-    {
-      title: "Agro-Processed Specialties",
-      desc: "Shito Black Pepper Sauce, Tomato Paste, Fruit Jams, Ready Flour Mixes",
-      category: "Agro-Processed Products",
-      icon: <Package className="w-5 h-5" />
-    }
-  ];
-
   const isHeroPage = location.pathname === '/' || location.pathname === '/about';
   const isTransparent = isHeroPage && !isScrolled && !mobileMenuOpen;
 
   const headerBgClass = isTransparent
     ? 'bg-transparent'
-    : 'bg-white dark:bg-dark-card shadow-[0_2px_20px_rgba(0,0,0,0.08)]';
-
-  const textClass = isTransparent
-    ? 'text-white'
-    : 'text-charcoal dark:text-dark-text';
+    : 'bg-white/95 dark:bg-dark-card/95 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,0.08)]';
 
   const linkClass = (path: string) => `text-xs font-bold uppercase tracking-widest transition-all duration-300 ${location.pathname === path
     ? (isTransparent ? 'text-white border-b-2 border-gold-accent pb-1' : 'text-forest-main dark:text-gold-accent border-b-2 border-forest-main dark:border-gold-accent pb-1')
     : (isTransparent ? 'text-white/80 hover:text-white hover:-translate-y-0.5' : 'text-charcoal/80 dark:text-dark-text/80 hover:text-forest-main dark:hover:text-gold-accent hover:-translate-y-0.5')
     }`;
 
+  const isActiveRoute = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
+  };
+
+  const isBusinessAreasActive = [
+    '/agro-processing',
+    '/export-distribution',
+    '/global-markets',
+    '/insights'
+  ].some(p => location.pathname.startsWith(p));
+
+  const mobileLinkClass = (path: string) => {
+    const active = isActiveRoute(path);
+    if (active) {
+      return 'flex items-center justify-between min-h-[48px] px-3.5 py-2.5 rounded-xl text-sm font-extrabold text-brand-blue dark:text-gold-accent bg-slate-100/90 dark:bg-dark-muted/90 border-l-4 border-brand-blue dark:border-gold-accent shadow-xs transition-all duration-300 scale-[1.01]';
+    }
+    return 'flex items-center justify-between min-h-[48px] px-3.5 py-2.5 rounded-xl text-sm font-bold text-slate-700 dark:text-dark-text/90 hover:bg-slate-100 dark:hover:bg-dark-muted hover:text-brand-blue dark:hover:text-gold-accent hover:translate-x-1.5 transition-all duration-200 group';
+  };
+
+  const mobileSubLinkClass = (path: string) => {
+    const active = location.pathname === path;
+    if (active) {
+      return 'flex items-center justify-between min-h-[42px] px-3.5 rounded-lg text-xs font-extrabold text-brand-blue dark:text-gold-accent bg-brand-blue/10 dark:bg-gold-accent/20 border-l-3 border-brand-blue dark:border-gold-accent transition-all';
+    }
+    return 'flex items-center justify-between min-h-[42px] px-3.5 rounded-lg text-xs font-semibold text-slate-600 dark:text-dark-text/80 hover:bg-slate-200/80 dark:hover:bg-dark-muted hover:text-brand-blue dark:hover:text-gold-accent hover:translate-x-1 transition-all group';
+  };
+
   return (
     <>
+      {/* Mobile Dark Backdrop Overlay when Menu is Open */}
+      {mobileMenuOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 transition-opacity duration-300"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Absolute Header to allow hero sections to flow underneath without layout shift */}
       <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${headerBgClass} ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
 
@@ -146,6 +128,7 @@ const Header: React.FC = () => {
                   <Link to="/about" className={linkClass('/about')}>About Us</Link>
 
                   <Link to="/products?category=All" className={linkClass('/products')}>Product Gallery</Link>
+                  <Link to="/suppliers" className={linkClass('/suppliers')}>Members & Benefits</Link>
 
                   {/* Business Areas Dropdown */}
                   <div className="relative group">
@@ -163,7 +146,6 @@ const Header: React.FC = () => {
                   <Link to="/contact" className={linkClass('/contact')}>Contact</Link>
                 </nav>
 
-
                 <button
                   onClick={toggleTheme}
                   aria-label="Toggle dark mode"
@@ -178,55 +160,235 @@ const Header: React.FC = () => {
               </div>
 
               {/* Mobile Menu & Theme Toggle Controls */}
-              <div className="flex items-center gap-2 lg:hidden">
+              <div className="flex items-center gap-2.5 lg:hidden">
                 <button
                   onClick={toggleTheme}
                   aria-label="Toggle dark mode"
-                  className={`h-11 w-11 min-h-[44px] min-w-[44px] rounded-xl flex items-center justify-center transition-all ${isTransparent ? 'bg-white/15 text-white hover:bg-white/25' : 'bg-slate-100 dark:bg-dark-muted text-slate-900 dark:text-gold-accent hover:bg-slate-200 dark:hover:bg-dark-border'
+                  className={`h-11 w-11 min-h-[44px] min-w-[44px] rounded-xl flex items-center justify-center transition-all ${isTransparent
+                    ? 'bg-white/15 text-white hover:bg-white/25 active:scale-95'
+                    : 'bg-slate-100 dark:bg-dark-muted text-slate-900 dark:text-gold-accent hover:bg-slate-200 dark:hover:bg-dark-border active:scale-95'
                     }`}
                 >
-                  {theme === 'dark' ? <Sun size={22} /> : <Moon size={22} />}
+                  {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
                 </button>
 
+                {/* Refined Mobile Menu Toggle Button */}
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className={`h-11 w-11 min-h-[44px] min-w-[44px] rounded-xl flex items-center justify-center transition-colors ${isTransparent ? 'bg-white/15 text-white hover:bg-white/25' : 'bg-slate-100 dark:bg-dark-muted text-slate-900 dark:text-gold-accent hover:bg-slate-200 dark:hover:bg-dark-border'
+                  className={`h-11 w-11 min-h-[44px] min-w-[44px] rounded-xl flex items-center justify-center transition-all duration-300 ${mobileMenuOpen
+                    ? 'bg-slate-900 text-white dark:bg-gold-accent dark:text-dark-card shadow-lg ring-2 ring-slate-400/30 scale-105'
+                    : isTransparent
+                      ? 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
+                      : 'bg-slate-100 dark:bg-dark-muted text-slate-900 dark:text-gold-accent hover:bg-brand-blue hover:text-white dark:hover:bg-gold-accent dark:hover:text-dark-card border border-slate-200 dark:border-dark-border'
                     }`}
-                  aria-label="Toggle menu"
+                  aria-label="Toggle menu bar"
                 >
-                  {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                  {mobileMenuOpen ? (
+                    <X size={22} className="transition-transform duration-300 rotate-90" />
+                  ) : (
+                    <Menu size={22} className="transition-transform duration-300" />
+                  )}
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Mobile Menu Dropdown */}
+          {/* Enhanced Opaque Mobile Dropdown Menu */}
           {mobileMenuOpen && (
-            <div className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-dark-card shadow-2xl border-t border-slate-200 dark:border-dark-border px-4 py-6 space-y-2 max-h-[85vh] overflow-y-auto">
-              <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[44px] px-3 rounded-xl text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-dark-muted">Home</Link>
-              <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[44px] px-3 rounded-xl text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-dark-muted">About Us</Link>
+            <div className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-dark-card shadow-2xl border-t border-b border-slate-200 dark:border-dark-border px-4 py-5 space-y-2 max-h-[85vh] overflow-y-auto z-50 animate-in slide-in-from-top-2 duration-300">
+              
+              {/* Header Label inside Menu */}
+              <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-slate-200/80 dark:border-dark-border text-[11px] font-extrabold text-slate-400 dark:text-dark-text/50 uppercase tracking-widest">
+                <span>Navigation Menu</span>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-dark-muted text-brand-blue dark:text-gold-accent text-[10px] font-black border border-slate-200 dark:border-dark-border">
+                  <Sparkles size={10} /> Active View
+                </span>
+              </div>
 
-              <Link to="/products?category=All" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[44px] px-3 rounded-xl text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-dark-muted">Product Gallery</Link>
+              {/* Home */}
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className={mobileLinkClass('/')}
+              >
+                <span className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg transition-transform duration-200 group-hover:scale-110 ${isActiveRoute('/') ? 'bg-brand-blue text-white dark:bg-gold-accent dark:text-dark-card shadow-xs' : 'bg-slate-100 dark:bg-dark-muted text-slate-500 dark:text-dark-text/60 group-hover:text-brand-blue dark:group-hover:text-gold-accent'}`}>
+                    <Home size={17} />
+                  </div>
+                  Home
+                </span>
+                {isActiveRoute('/') ? (
+                  <span className="px-2.5 py-0.5 rounded-full bg-brand-blue text-white dark:bg-gold-accent dark:text-dark-card text-[10px] font-black uppercase tracking-wider shadow-2xs">Active</span>
+                ) : (
+                  <ChevronRight size={16} className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-200 text-brand-blue dark:text-gold-accent" />
+                )}
+              </Link>
 
+              {/* About Us */}
+              <Link
+                to="/about"
+                onClick={() => setMobileMenuOpen(false)}
+                className={mobileLinkClass('/about')}
+              >
+                <span className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg transition-transform duration-200 group-hover:scale-110 ${isActiveRoute('/about') ? 'bg-brand-blue text-white dark:bg-gold-accent dark:text-dark-card shadow-xs' : 'bg-slate-100 dark:bg-dark-muted text-slate-500 dark:text-dark-text/60 group-hover:text-brand-blue dark:group-hover:text-gold-accent'}`}>
+                    <Info size={17} />
+                  </div>
+                  About Us
+                </span>
+                {isActiveRoute('/about') ? (
+                  <span className="px-2.5 py-0.5 rounded-full bg-brand-blue text-white dark:bg-gold-accent dark:text-dark-card text-[10px] font-black uppercase tracking-wider shadow-2xs">Active</span>
+                ) : (
+                  <ChevronRight size={16} className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-200 text-brand-blue dark:text-gold-accent" />
+                )}
+              </Link>
+
+              {/* Product Gallery */}
+              <Link
+                to="/products?category=All"
+                onClick={() => setMobileMenuOpen(false)}
+                className={mobileLinkClass('/products')}
+              >
+                <span className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg transition-transform duration-200 group-hover:scale-110 ${isActiveRoute('/products') ? 'bg-brand-blue text-white dark:bg-gold-accent dark:text-dark-card shadow-xs' : 'bg-slate-100 dark:bg-dark-muted text-slate-500 dark:text-dark-text/60 group-hover:text-brand-blue dark:group-hover:text-gold-accent'}`}>
+                    <Package size={17} />
+                  </div>
+                  Product Gallery
+                </span>
+                {isActiveRoute('/products') ? (
+                  <span className="px-2.5 py-0.5 rounded-full bg-brand-blue text-white dark:bg-gold-accent dark:text-dark-card text-[10px] font-black uppercase tracking-wider shadow-2xs">Active</span>
+                ) : (
+                  <ChevronRight size={16} className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-200 text-brand-blue dark:text-gold-accent" />
+                )}
+              </Link>
+
+              {/* Business Areas Collapsible Section */}
               <div className="py-1">
                 <button
                   onClick={() => setBusinessAreasOpen(!businessAreasOpen)}
-                  className="w-full flex items-center justify-between min-h-[44px] px-3 rounded-xl text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-dark-muted"
+                  className={`w-full flex items-center justify-between min-h-[48px] px-3.5 py-2.5 rounded-xl text-sm transition-all duration-300 group ${isBusinessAreasActive
+                    ? 'font-extrabold text-brand-blue dark:text-gold-accent bg-slate-100/90 dark:bg-dark-muted/90 border-l-4 border-brand-blue dark:border-gold-accent shadow-xs'
+                    : 'font-bold text-slate-700 dark:text-dark-text/90 hover:bg-slate-100 dark:hover:bg-dark-muted hover:text-brand-blue dark:hover:text-gold-accent hover:translate-x-1.5'
+                    }`}
                 >
-                  Business Areas
-                  <ChevronDown size={18} className={`transition-transform duration-300 ${businessAreasOpen ? 'rotate-180' : ''}`} />
+                  <span className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg transition-transform duration-200 group-hover:scale-110 ${isBusinessAreasActive ? 'bg-brand-blue text-white dark:bg-gold-accent dark:text-dark-card shadow-xs' : 'bg-slate-100 dark:bg-dark-muted text-slate-500 dark:text-dark-text/60 group-hover:text-brand-blue dark:group-hover:text-gold-accent'}`}>
+                      <Briefcase size={17} />
+                    </div>
+                    Business Areas
+                  </span>
+                  <div className="flex items-center gap-2">
+                    {isBusinessAreasActive && (
+                      <span className="px-2.5 py-0.5 rounded-full bg-brand-blue/20 dark:bg-gold-accent/30 text-brand-blue dark:text-gold-accent text-[10px] font-black uppercase">Active Hub</span>
+                    )}
+                    <ChevronDown size={18} className={`transition-transform duration-300 ${businessAreasOpen ? 'rotate-180 text-brand-blue dark:text-gold-accent' : 'text-slate-400'}`} />
+                  </div>
                 </button>
-                {businessAreasOpen && (
-                  <div className="pl-4 pr-2 py-2 space-y-1.5 mt-1 bg-slate-50 dark:bg-dark-muted/60 rounded-xl">
-                    <Link to="/agro-processing" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[40px] px-3 text-xs font-bold text-slate-700 dark:text-dark-text hover:text-brand-blue">Agro-Processing</Link>
-                    <Link to="/export-distribution" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[40px] px-3 text-xs font-bold text-slate-700 dark:text-dark-text hover:text-brand-blue">Export & Distribution</Link>
-                    <Link to="/global-markets" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[40px] px-3 text-xs font-bold text-slate-700 dark:text-dark-text hover:text-brand-blue">Global Markets</Link>
-                    <Link to="/insights" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[40px] px-3 text-xs font-bold text-slate-700 dark:text-dark-text hover:text-brand-blue">Insights & News</Link>
+
+                {/* Sub-Items */}
+                {(businessAreasOpen || isBusinessAreasActive) && (
+                  <div className="pl-4 pr-2 py-2 space-y-1.5 mt-1.5 bg-slate-50 dark:bg-dark-muted/50 rounded-xl border border-slate-200/60 dark:border-dark-border">
+                    <Link
+                      to="/agro-processing"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={mobileSubLinkClass('/agro-processing')}
+                    >
+                      <span className="flex items-center gap-2.5">
+                        <Factory size={15} /> Agro-Processing
+                      </span>
+                      {location.pathname === '/agro-processing' ? (
+                        <ChevronRight size={14} className="text-brand-blue dark:text-gold-accent" />
+                      ) : (
+                        <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200 text-brand-blue dark:text-gold-accent" />
+                      )}
+                    </Link>
+
+                    <Link
+                      to="/export-distribution"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={mobileSubLinkClass('/export-distribution')}
+                    >
+                      <span className="flex items-center gap-2.5">
+                        <Globe size={15} /> Export & Distribution
+                      </span>
+                      {location.pathname === '/export-distribution' ? (
+                        <ChevronRight size={14} className="text-brand-blue dark:text-gold-accent" />
+                      ) : (
+                        <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200 text-brand-blue dark:text-gold-accent" />
+                      )}
+                    </Link>
+
+                    <Link
+                      to="/global-markets"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={mobileSubLinkClass('/global-markets')}
+                    >
+                      <span className="flex items-center gap-2.5">
+                        <TrendingUp size={15} /> Global Markets
+                      </span>
+                      {location.pathname === '/global-markets' ? (
+                        <ChevronRight size={14} className="text-brand-blue dark:text-gold-accent" />
+                      ) : (
+                        <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200 text-brand-blue dark:text-gold-accent" />
+                      )}
+                    </Link>
+
+                    <Link
+                      to="/insights"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={mobileSubLinkClass('/insights')}
+                    >
+                      <span className="flex items-center gap-2.5">
+                        <Newspaper size={15} /> Insights & News
+                      </span>
+                      {location.pathname === '/insights' ? (
+                        <ChevronRight size={14} className="text-brand-blue dark:text-gold-accent" />
+                      ) : (
+                        <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200 text-brand-blue dark:text-gold-accent" />
+                      )}
+                    </Link>
                   </div>
                 )}
               </div>
 
-              <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[44px] px-3 rounded-xl text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-dark-muted">Contact</Link>
+              {/* Member Network & Benefits */}
+              <Link
+                to="/suppliers"
+                onClick={() => setMobileMenuOpen(false)}
+                className={mobileLinkClass('/suppliers')}
+              >
+                <span className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg transition-transform duration-200 group-hover:scale-110 ${isActiveRoute('/suppliers') ? 'bg-brand-blue text-white dark:bg-gold-accent dark:text-dark-card shadow-xs' : 'bg-slate-100 dark:bg-dark-muted text-slate-500 dark:text-dark-text/60 group-hover:text-brand-blue dark:group-hover:text-gold-accent'}`}>
+                    <Users size={17} />
+                  </div>
+                  Member Network & Benefits
+                </span>
+                {isActiveRoute('/suppliers') ? (
+                  <span className="px-2.5 py-1 rounded-full bg-brand-blue text-white dark:bg-gold-accent dark:text-dark-card text-[10px] font-black uppercase tracking-wider shadow-2xs">Active</span>
+                ) : (
+                  <ChevronRight size={16} className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-200 text-brand-blue dark:text-gold-accent" />
+                )}
+              </Link>
+
+              {/* Contact */}
+              <Link
+                to="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className={mobileLinkClass('/contact')}
+              >
+                <span className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg transition-transform duration-200 group-hover:scale-110 ${isActiveRoute('/contact') ? 'bg-brand-blue text-white dark:bg-gold-accent dark:text-dark-card shadow-xs' : 'bg-slate-100 dark:bg-dark-muted text-slate-500 dark:text-dark-text/60 group-hover:text-brand-blue dark:group-hover:text-gold-accent'}`}>
+                    <Mail size={17} />
+                  </div>
+                  Contact
+                </span>
+                {isActiveRoute('/contact') ? (
+                  <span className="px-2.5 py-1 rounded-full bg-brand-blue text-white dark:bg-gold-accent dark:text-dark-card text-[10px] font-black uppercase tracking-wider shadow-2xs">Active</span>
+                ) : (
+                  <ChevronRight size={16} className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-200 text-brand-blue dark:text-gold-accent" />
+                )}
+              </Link>
+
             </div>
           )}
         </div>

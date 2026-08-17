@@ -13,14 +13,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSelectProduct }) =
   return (
     <div
       onClick={() => onSelectProduct(product)}
-      className="cursor-pointer flex flex-col h-full bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border shadow-xs hover:shadow-xl hover:-translate-y-1.5 hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-300 ease-out rounded-xl overflow-hidden group"
+      className="cursor-pointer flex flex-col h-full w-full bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border shadow-xs hover:shadow-xl hover:-translate-y-1.5 hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-300 ease-out rounded-xl overflow-hidden group"
     >
       {/* Gallery Image Container */}
-      <div className="aspect-[4/3] w-full overflow-hidden relative bg-slate-100 dark:bg-dark-bg">
+      <div className="aspect-[4/3] w-full overflow-hidden relative bg-slate-100 dark:bg-dark-bg flex items-center justify-center">
         <img
           src={product.imageUrl}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
           onError={(e) => {
             (e.target as HTMLImageElement).src = '/images/fresh yam.jpeg';
           }}

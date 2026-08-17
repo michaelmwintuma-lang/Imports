@@ -38,7 +38,7 @@ const RFQWizardModal: React.FC<RFQWizardModalProps> = ({ isOpen, onClose, initia
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const generatedRef = `RFQ-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-    
+
     setIsSubmitting(true);
     setError(false);
 

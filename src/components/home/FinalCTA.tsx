@@ -31,6 +31,12 @@ const FinalCTA: React.FC = () => {
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link 
+            to="/suppliers"
+            className="bg-white/10 border border-white/30 text-white px-8 py-3.5 rounded-full font-heading font-bold hover:bg-white/20 transition-all flex items-center justify-center text-sm uppercase tracking-wider"
+          >
+            Join Member Network
+          </Link>
+          <Link 
             to="/contact"
             className="bg-white/10 border border-white/30 text-white px-8 py-3.5 rounded-full font-heading font-bold hover:bg-white/20 transition-all flex items-center justify-center text-sm uppercase tracking-wider"
           >

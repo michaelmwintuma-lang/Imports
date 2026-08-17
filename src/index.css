@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    font-family: 'Plus Jakarta Sans', 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Inter', 'Manrope', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   html {
@@ -12,13 +12,18 @@
     overflow-x: hidden;
     max-width: 100vw;
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
-    @apply bg-cream-bg text-charcoal font-sans antialiased selection:bg-forest-main selection:text-white transition-colors duration-300;
-    font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+    @apply bg-cream-bg text-charcoal font-sans antialiased selection:bg-brand-blue selection:text-white transition-colors duration-300;
+    font-family: 'Inter', 'Manrope', sans-serif;
     overflow-x: hidden;
     max-width: 100vw;
+    font-size: 15px;
+    line-height: 1.65;
   }
 
   .dark body {
@@ -32,7 +37,8 @@
   h4,
   h5,
   h6 {
-    @apply font-heading tracking-tight text-forest-dark break-words;
+    @apply font-heading tracking-tight text-forest-dark break-words font-extrabold;
+    font-family: 'Manrope', 'Inter', sans-serif;
   }
 
   .dark h1,
@@ -45,11 +51,12 @@
   }
 
   p {
-    @apply leading-relaxed text-charcoal/80 break-words;
+    @apply leading-relaxed text-charcoal/85 break-words;
+    font-family: 'Inter', sans-serif;
   }
 
   .dark p {
-    color: rgba(243, 244, 246, 0.8);
+    color: rgba(243, 244, 246, 0.85);
   }
 
   /* Form dropdown select & option contrast fix */

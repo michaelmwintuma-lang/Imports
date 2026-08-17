@@ -70,11 +70,10 @@ const AdminPage: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                activeTab === tab.id 
-                  ? 'bg-gold-accent/20 text-gold-light font-bold' 
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${activeTab === tab.id
+                  ? 'bg-gold-accent/20 text-gold-light font-bold'
                   : 'text-cream-muted/70 hover:bg-white/5 hover:text-white'
-              }`}
+                }`}
             >
               {tab.icon}
               {tab.label}
@@ -82,7 +81,7 @@ const AdminPage: React.FC = () => {
           ))}
         </nav>
         <div className="p-4 border-t border-white/10">
-          <button 
+          <button
             onClick={() => setIsAuthenticated(false)}
             className="w-full flex items-center gap-3 px-4 py-2 text-sm font-medium text-cream-muted/70 hover:text-white transition-colors"
           >

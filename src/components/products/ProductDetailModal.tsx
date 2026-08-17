@@ -38,11 +38,11 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
             
             {/* Image Preview Container */}
-            <div className="aspect-square rounded-xl overflow-hidden border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg relative">
+            <div className="aspect-square rounded-xl overflow-hidden border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg relative flex items-center justify-center">
               <img
                 src={product.imageUrl}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-center"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/images/fresh yam.jpeg';
                 }}

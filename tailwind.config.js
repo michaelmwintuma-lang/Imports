@@ -47,8 +47,9 @@ export default {
         charcoal: '#0F172A',
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'Outfit', 'Inter', 'sans-serif'],
-        heading: ['Montserrat', '"Plus Jakarta Sans"', 'sans-serif'],
+        sans: ['Inter', 'Manrope', '"Plus Jakarta Sans"', '"Open Sans"', 'sans-serif'],
+        heading: ['Manrope', 'Inter', '"Plus Jakarta Sans"', 'sans-serif'],
+        display: ['Manrope', 'Inter', 'sans-serif'],
       },
       boxShadow: {
         'editorial': '0 10px 30px -10px rgba(11, 30, 45, 0.08)',

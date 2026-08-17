@@ -269,7 +269,7 @@ const mockProducts: Product[] = [
     certifications: ['Authentic Ghanaian Craftmanship Clearance'],
     targetMarkets: ['Global Diaspora Outlets', 'Specialty Cultural Retailers'],
     imageUrl: '/images/asanka.jpg',
-    featured: false
+    featured: true
   },
   {
     id: 'prod-16',
@@ -286,6 +286,23 @@ const mockProducts: Product[] = [
     certifications: ['Phytosanitary Clearance', 'FDA Ghana Registered'],
     targetMarkets: ['Europe', 'North America', 'Global Diaspora Outlets'],
     imageUrl: '/images/waakye leaves.jpg',
+    featured: true
+  },
+  {
+    id: 'prod-17',
+    name: 'Handcrafted Ghanaian Wooden Asanka & Tapoli Set',
+    category: 'Agro-Processed Products',
+    type: 'Processed Product',
+    origin: 'Ghana (Ashanti Wood Artisan Village)',
+    status: 'PUBLISHED',
+    description: 'Authentic hand-carved Ghanaian wooden Asanka (grinding mortar bowl) crafted from premium Ghanaian hardwood, complete with an ergonomic wooden tapoli masher. Features grooved interior ridges designed for traditional spice, pepper, and sauce grinding.',
+    moq: '50 Sets',
+    shelfLife: 'Indefinite',
+    storageConditions: 'Dry ambient storage in protective export cartons.',
+    packagingOptions: ['Soft-Cushioned Export Boxes', 'Individual Protective Pouches'],
+    certifications: ['FDA Ghana Artisanal Inspection', 'GEPA Woodcraft Export Clearance'],
+    targetMarkets: ['North America', 'Europe', 'Global Diaspora Outlets'],
+    imageUrl: '/images/asans.jpeg',
     featured: true
   }
 ];
@@ -402,7 +419,7 @@ export const DatabaseProvider: React.FC<{ children: ReactNode }> = ({ children }
       author: 'Cultural Trade Desk',
       publishedDate: '2026-06-05',
       readTime: '3 min read',
-      imageUrl: '/images/asanka.webp',
+      imageUrl: '/images/asans.jpeg',
       status: 'PUBLISHED'
     }
   ]);
