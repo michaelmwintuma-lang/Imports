@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { ArticleItem } from '../../types';
 import { X, Clock, Calendar, User, Tag, ArrowRight, Share2 } from 'lucide-react';
 
@@ -15,8 +16,11 @@ const InsightDetailModal: React.FC<InsightDetailModalProps> = ({
 }) => {
   if (!isOpen || !article) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fade-in">
+  return createPortal(
+    <div 
+      className="fixed inset-0 z-[100] overflow-y-auto bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+      onClick={onClose}
+    >
       <div 
         className="bg-white dark:bg-dark-card border border-cream-muted dark:border-dark-border w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden relative max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
@@ -79,7 +83,8 @@ const InsightDetailModal: React.FC<InsightDetailModalProps> = ({
 
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

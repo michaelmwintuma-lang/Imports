@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { Product } from '../../types';
 import { X, CheckCircle2, ArrowRight, Package, Thermometer } from 'lucide-react';
 import PillBadge from '../common/PillBadge';
@@ -18,8 +19,11 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 }) => {
   if (!isOpen || !product) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6">
+  return createPortal(
+    <div 
+      className="fixed inset-0 z-[100] overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+      onClick={onClose}
+    >
       <div 
         className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border w-full max-w-3xl rounded-2xl shadow-xl overflow-hidden relative max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
@@ -129,7 +133,8 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

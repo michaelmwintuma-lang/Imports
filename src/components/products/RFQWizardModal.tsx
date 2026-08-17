@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useCompany } from '../../context/CompanyContext';
 import { useDatabase } from '../../context/DatabaseContext';
 import { X, Send, CheckCircle2 } from 'lucide-react';
@@ -64,18 +65,18 @@ const RFQWizardModal: React.FC<RFQWizardModalProps> = ({ isOpen, onClose, initia
         status: 'NEW'
       });
 
-      // 2. Send email via FormSubmit
-      const response = await fetch("https://formsubmit.co/ajax/michaeldmwintuma@gmail.com", {
-        method: "POST",
+      // 2. Submit to Web3Forms / Formspree endpoint if configured
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-          _subject: `New Request for Quote (RFQ): ${generatedRef}`,
-          _captcha: "false",
-          _template: "table",
-          _replyto: formData.email || undefined,
+          access_key: 'YOUR_ACCESS_KEY_HERE',
+          subject: `New B2B RFQ Inquiry [${generatedRef}] - ${formData.productName}`,
+          from_name: formData.fullName,
+          replyto: formData.email,
           _autoresponse: formData.email ? "Thank you for reaching out to us! We have successfully received your submission and our team is already reviewing your details. Rest assured, one of our specialists will get back to you shortly. We appreciate your interest and look forward to working with you!" : undefined,
           ...formData
         })
@@ -94,9 +95,15 @@ const RFQWizardModal: React.FC<RFQWizardModalProps> = ({ isOpen, onClose, initia
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-forest-dark/80 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white dark:bg-dark-card rounded-3xl max-w-2xl w-full p-6 md:p-8 relative shadow-2xl border border-cream-muted dark:border-dark-border max-h-[90vh] overflow-y-auto">
+  return createPortal(
+    <div 
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-forest-dark/80 backdrop-blur-sm animate-fade-in"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white dark:bg-dark-card rounded-3xl max-w-2xl w-full p-6 md:p-8 relative shadow-2xl border border-cream-muted dark:border-dark-border max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           onClick={onClose}
           className="absolute top-6 right-6 w-9 h-9 rounded-full bg-cream-bg dark:bg-dark-muted flex items-center justify-center text-charcoal/60 dark:text-dark-text/60 hover:text-charcoal dark:hover:text-dark-text transition-colors"
@@ -296,7 +303,8 @@ const RFQWizardModal: React.FC<RFQWizardModalProps> = ({ isOpen, onClose, initia
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

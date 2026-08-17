@@ -48,9 +48,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSelectProduct }) =
 
         {/* Card Footer Link */}
         <div className="pt-3 border-t border-slate-100 dark:border-dark-border flex items-center justify-end">
-          <span className="text-xs font-bold text-brand-blue dark:text-brand-coral flex items-center gap-1 group-hover:gap-2 transition-all">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectProduct(product);
+            }}
+            className="text-xs font-bold text-brand-blue dark:text-brand-coral flex items-center gap-1 group-hover:gap-2 transition-all hover:underline cursor-pointer focus:outline-none"
+          >
             View Details <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
-          </span>
+          </button>
         </div>
       </div>
     </div>

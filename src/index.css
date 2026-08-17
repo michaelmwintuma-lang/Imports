@@ -136,7 +136,6 @@
 
 .animate-page-enter {
   animation: pageEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: transform, opacity;
 }
 
 /* Micro-animations */
